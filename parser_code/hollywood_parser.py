@@ -8,10 +8,10 @@ for dirname, _, filenames in os.walk('input'):
         print(os.path.join(dirname, filename))
 
 # %%
-input_folder_path = "../input/hollywood/"
+input_folder_path = "input/hollywood/"
 # TODO: get these meta and subtitles data from Kaggle
-MOVIES_META_PATH = input_folder_path + "movies_meta.csv'
-MOVIES_SUB_PATH = input_folder_path + "movies_subtitles.csv'
+MOVIES_META_PATH = input_folder_path + "movies_meta.csv"
+MOVIES_SUB_PATH = input_folder_path + "movies_subtitles.csv"
 
 # %%
 meta_df = pd.read_csv(MOVIES_META_PATH)

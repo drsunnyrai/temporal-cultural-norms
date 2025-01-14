@@ -87,7 +87,7 @@ def get_filenames(dir):
     return filenames
 
 # TODO: change input file directory as needed (for bollywood_sub_
-dir = "../input/bollywood_sub"
+dir = "input/bollywood"
 filenames = get_filenames(dir)
 
 # Extracting the filenames by years and reading the content
