@@ -74,11 +74,22 @@ gpt_model = "gpt-4o"
 
 # TODO: Change the output_file_name 
 output_folder_path = "gpt_data/"
-# FOR BOLLYWOOD
-output_file_name = output_folder_path + f"entire_bollywood_{gpt_model}.csv"
-# FOR HOLLYWOOD
-# output_file_name = output_folder_path + f"entire_hollywood_{gpt_model}.csv"
+output_file_name = output_folder_path + f"entire_japanese-subset_{gpt_model}.csv"
 
+# TODO: Uncomment if you want to validate api key before using
+# def check_openai_api_key(api_key):
+#     client = openai.OpenAI(api_key=api_key)
+#     try:
+#         client.models.list()
+#     except openai.AuthenticationError:
+#         return False
+#     else:
+#         return True
+
+# if check_openai_api_key(api_key):
+#     print("Valid OpenAI API key.")
+# else:
+#     print("Invalid OpenAI API key.")
 
 # %%
 def compute_gpt(dialogue, temp=0.5):
@@ -110,12 +121,13 @@ def compute_gpt(dialogue, temp=0.5):
 
 # %%
 # Load data
+# TODO: Change the path based on corresponding file name
 input_folder_path = "parsed_input/"
-# path = input_folder_path + "matching_hollywood.csv"
-path = input_folder_path + "matching_bollywood.csv"
+path = input_folder_path + "japanese-subset_matching.csv"
 overlaps_df = pd.read_csv(path)
+
 # TODO: uncomment if you want to run on a subset first
-overlaps_df = overlaps_df.sample(n=3, random_state=42)
+# overlaps_df = overlaps_df.sample(n=3, random_state=42)
 
 # Initialize new columns if they don’t exist
 new_columns = ["experience_social_emotion", "character", "social_emotion", "gender", "reason"]
