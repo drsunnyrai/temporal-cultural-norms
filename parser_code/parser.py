@@ -41,11 +41,10 @@ def load_and_merge_lexicons(file_path_1, file_path_2):
     combined_df = pd.concat([df1[['word']], df2[['word']]]).drop_duplicates().reset_index(drop=True)
     return combined_df
 
-# TODO: change the keywords as needed
+# Change keywords as needed
 keywords = ['shame', 'shamed', 'shameful', 'ashamed', 'proud', 'prouder', 'proudly', 'pride']
 print("List of unique keywords:", keywords)
 
-# Define the `read` function
 def read(file_path):
     l = []
     try:
@@ -86,9 +85,12 @@ def get_filenames(dir):
             filenames.append(filename)
     return filenames
 
-# TODO: change input file directory as needed (for bollywood_sub_
-dir = "input/bollywood"
-filenames = get_filenames(dir)
+# USER: Specify input and output directory paths and output file name
+input_dir = "../input/test-japanese-2024/japanese-subtitles-subset"
+output_dir = "../parsed_input"
+output_file_name = "japanese-subset"
+
+filenames = get_filenames(input_dir)
 
 # Extracting the filenames by years and reading the content
 movies_data = []
@@ -102,21 +104,21 @@ for movie_id, filename in enumerate(filenames, start=1):
 
     movie_name = clean_filename.split(":", 1)[1].strip()
 
-    file_dir = "../input/bollywood_sub/%s" % filename
+    file_dir = os.path.join(input_dir, filename)
     subtitle_content = read(file_dir)
 
     movies_data.append([movie_name, release_year, subtitle_content])
 
-bollywood_movies_df = pd.DataFrame(movies_data, columns=['movie_name', 'release_year', 'subtitle_content'])
+movies_df = pd.DataFrame(movies_data, columns=['movie_name', 'release_year', 'subtitle_content'])
 
-bollywood_movies_df['release_year'] = bollywood_movies_df['release_year'].astype(int)
+movies_df['release_year'] = movies_df['release_year'].astype(int)
 
 def get_decade(year):
     return "%ss" % ((year // 10) * 10)
 
-bollywood_movies_df['decade'] = bollywood_movies_df['release_year'].apply(get_decade)
+movies_df['decade'] = movies_df['release_year'].apply(get_decade)
 
-decade_counts = bollywood_movies_df['decade'].value_counts().sort_index()
+decade_counts = movies_df['decade'].value_counts().sort_index()
 
 def parse_subtitles(subtitle_list):
     parsed = []
@@ -138,14 +140,12 @@ def parse_subtitles(subtitle_list):
     
     return parsed
 
-bollywood_df = bollywood_movies_df.copy()
-bollywood_df['subtitle_content'] = bollywood_df['subtitle_content'].apply(parse_subtitles)
+movies_df['subtitle_content'] = movies_df['subtitle_content'].apply(parse_subtitles)
 
-bollywood_subset_df = bollywood_df.drop_duplicates(subset=['movie_name', 'release_year']).reset_index(drop=True)
-print(f"num of movies {bollywood_subset_df.shape[0]}")
+movies_subset_df = movies_df.drop_duplicates(subset=['movie_name', 'release_year']).reset_index(drop=True)
+print(f"num of movies {movies_subset_df.shape[0]}")
 movie_id_map = {}
 next_movie_id = 1
-
 
 def extract_context(subtitle_list, keywords, num_lines, decade, name):
     global movie_id_map, next_movie_id
@@ -160,7 +160,6 @@ def extract_context(subtitle_list, keywords, num_lines, decade, name):
     movie_id = movie_id_map[name]
     
     subtitle_id = 1 
-
 
     # Separate storage for contexts with no keyword matches
     non_matching_data = {
@@ -181,7 +180,7 @@ def extract_context(subtitle_list, keywords, num_lines, decade, name):
 
         # Check if any keywords are in the current line
         for keyword in keywords:
-            if isinstance(keyword, str):  # Ensure keyword is a string
+            if isinstance(keyword, str):
                 pattern = r'\b%s\b' % re.escape(keyword.replace('*', '.*'))
                 
                 if re.search(pattern, line, re.IGNORECASE):
@@ -204,8 +203,7 @@ def extract_context(subtitle_list, keywords, num_lines, decade, name):
                 })
                 lexicon_words_list.append(matched_keywords)
                 added_instances.add(context)
-                subtitle_id += 1  # Increment subtitle ID for each new context
-
+                subtitle_id += 1
 
             last_processed_line = end - 1
             i = last_processed_line + 1
@@ -228,7 +226,7 @@ def extract_context(subtitle_list, keywords, num_lines, decade, name):
 
     return contexts, lexicon_words_list, non_matching_data
 
-def build_dataframe(b_df, keywords, num_lines):
+def build_dataframe(movies_df, keywords, num_lines):
     data = {
         'movie_name': [],
         'release_year': [],
@@ -248,7 +246,7 @@ def build_dataframe(b_df, keywords, num_lines):
         'context': []
     }
 
-    for index, row in b_df.iterrows():
+    for index, row in movies_df.iterrows():
         subtitle_list = row['subtitle_content']
         movie_name = row['movie_name']
         release_year = row['release_year']
@@ -274,7 +272,8 @@ def build_dataframe(b_df, keywords, num_lines):
         all_non_matching_data['decade'].extend(non_matching_data['decade'])
         all_non_matching_data['context'].extend(non_matching_data['context'])
         
-        print(f"done for index {index}")
+        # LOGGING: Uncomment if desired
+        # print(f"done for index {index}")
 
     matched_df = pd.DataFrame(data)
     non_matched_df = pd.DataFrame(all_non_matching_data)
@@ -282,11 +281,10 @@ def build_dataframe(b_df, keywords, num_lines):
 
 # Run the extraction and save both DataFrames
 num_lines = 5
-matched_df, non_matched_df = build_dataframe(bollywood_subset_df, keywords, num_lines)
+matched_df, non_matched_df = build_dataframe(movies_subset_df, keywords, num_lines)
 
 # Save the matched and non-matched contexts as separate CSVs
-# TODO: change file names as needed
-output_folder_path = "../parsed_input/"
-non_matched_df.to_csv('random_bollywood.csv', index=False, escapechar='\\')
-matched_df.to_csv('matching_bollywood.csv', index=False, escapechar='\\')
+# Specify output file paths
+non_matched_df.to_csv(os.path.join(output_dir, f"{output_file_name}_random.csv"), index=False, escapechar='\\')
+matched_df.to_csv(os.path.join(output_dir, f"{output_file_name}_matching.csv"), index=False, escapechar='\\')
 print("Extraction and saving complete!")
