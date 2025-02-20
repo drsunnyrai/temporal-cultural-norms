@@ -69,7 +69,7 @@ import os
 
 # %%
 # TODO: replace it with your own openai api key
-api_key = ""
+api_key = 
 gpt_model = "gpt-4o"
 
 # TODO: Change the output_file_name 

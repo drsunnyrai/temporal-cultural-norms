@@ -86,9 +86,9 @@ def get_filenames(dir):
     return filenames
 
 # USER: Specify input and output directory paths and output file name
-input_dir = "../input/test-japanese-2024/japanese-subtitles-subset"
+input_dir = "../input/Korea"
 output_dir = "../parsed_input"
-output_file_name = "japanese-subset"
+output_file_name = "korea"
 
 filenames = get_filenames(input_dir)
 
@@ -97,12 +97,12 @@ movies_data = []
 for movie_id, filename in enumerate(filenames, start=1):
     clean_filename = filename.replace(".srt", "").strip()
 
-    release_year = clean_filename.split(":")[0].strip()
+    release_year = clean_filename.split("_")[0].strip()
 
     if not release_year.isdigit() or not (1900 <= int(release_year) <= 2024):
         continue
 
-    movie_name = clean_filename.split(":", 1)[1].strip()
+    movie_name = clean_filename.split("_", 1)[1].strip()
 
     file_dir = os.path.join(input_dir, filename)
     subtitle_content = read(file_dir)
