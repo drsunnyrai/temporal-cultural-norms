@@ -14,9 +14,11 @@ import requests
 # Load environment variables from .env file
 load_dotenv()
 
-#TODO: replace with your API key, username and password
+#TODO: replace with your API key, app name and version, username and password
 API_URL = "https://api.opensubtitles.com/api/v1"
 API_KEY = ''
+APP_NAME = ''
+APP_VERSION = ''
 
 
 USERNAME = ''
@@ -24,7 +26,8 @@ PASSWORD = ''
 
 headers = {
     "Api-Key": API_KEY,
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "User-Agent": f"{APP_NAME} v{APP_VERSION}"
 }
 
 def login():
