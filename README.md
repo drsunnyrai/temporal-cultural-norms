@@ -31,7 +31,6 @@ This includes several different files that range from the word embeddings (witho
 Please cross-check with the `.ipynb` notebook: `processing_ipynb` to see what each of the file means. 
 
 ### How to run
-Note: This process has already been completed and all data can be found in
 
 *Assuming you have access to Box and Venti*
 1. Language and libraries. Make sure you have `python3` and all necessary libraries installed.
