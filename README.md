@@ -57,19 +57,6 @@ This will output the `matching_{country}.csv` and `random_{random}.csv` files in
 4. Run either the python file or notebook file to process, analyze, and perform clustering on your results from part (3) (`processing.ipynb` or `processing.py`)
 * Load the python notebook and run each cell. Make sure you configure the files and encoding and duplicate booleans as needed
 
-### Citations
-Please leave us a star and cite our paper(s) if you find our work helpful.
-```
-Citation to add in Github link - @misc{rai2024socialnormscinemacrosscultural,
-      title={Social Norms in Cinema: A Cross-Cultural Analysis of Shame, Pride and Prejudice},
-      author={Sunny Rai and Khushang Jilesh Zaveri and Shreya Havaldar and Soumna Nema and Lyle Ungar and Sharath Chandra Guntuku},
-      year={2024},
-      eprint={2402.11333},
-      archivePrefix={arXiv},
-      primaryClass={cs.CY},
-      url={https://arxiv.org/abs/2402.11333},
-}
-```
 
 
 
