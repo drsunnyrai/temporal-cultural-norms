@@ -4,7 +4,6 @@ This is the code used to scrape subtitle data from OpenSubtitles and parse throu
 ### Setting up
 Make sure to install all necessary python libaries and packages.
 Stay in the root folder, and make sure to create the following directories:
-- input/
 - parsed_input/
 - gpt_data/
 - processed_data/
@@ -49,6 +48,7 @@ China .csv		India .csv		Korea .csv		UK .csv
 * You may need to configure the output directory
 4. Parse through raw subtitles data to obtain `matching` vs `random` contexts
 * Obtain contexts by running `python3 parser_code/parser.py`
+* You may need to rename the subtitle directory to match the syntax of the parser.py script
 This will output the `matching_{country}.csv` and `random_{random}.csv` files inside `parsed_input/` folder.
 3. Call GPT-4o calls on the parsed data
 * Obtain and replace the OpenAI key with yours
